@@ -7,7 +7,7 @@ import com.arellomobile.mvp.MvpPresenter;
 
 import io.reactivex.Scheduler;
 import ru.geekbrains.android3_5.model.entity.User;
-import ru.geekbrains.android3_5.model.repo.RealmUserRepo;
+import ru.geekbrains.android3_5.model.repo.UserRepo;
 import ru.geekbrains.android3_5.view.MainView;
 import ru.geekbrains.android3_5.view.RepoRowView;
 import timber.log.Timber;
@@ -15,13 +15,13 @@ import timber.log.Timber;
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> implements IRepoListPresenter {
     private Scheduler scheduler;
-    private RealmUserRepo userRepo;
+    private UserRepo userRepo;
 
     private User user;
 
     public MainPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        userRepo = new RealmUserRepo();
+        userRepo = new UserRepo(UserRepo.CacheDbType.PAPER);
     }
 
     @Override
