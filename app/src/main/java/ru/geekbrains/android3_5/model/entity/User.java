@@ -3,6 +3,7 @@ package ru.geekbrains.android3_5.model.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class User {
     String login;
     String avatarUrl;

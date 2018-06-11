@@ -1,6 +1,9 @@
 package ru.geekbrains.android3_5.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,8 +21,9 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import ru.geekbrains.android3_5.R;
 import ru.geekbrains.android3_5.model.image.ImageLoader;
-import ru.geekbrains.android3_5.model.image.android.ImageLoaderGlide;
+import ru.geekbrains.android3_5.model.image.android.ImageLoaderPicasso;
 import ru.geekbrains.android3_5.presenter.MainPresenter;
+import timber.log.Timber;
 
 public class MainActivity extends MvpAppCompatActivity implements MainView {
 
@@ -47,11 +51,14 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        imageLoader = new ImageLoaderGlide();
+        checkPermissions();
+        imageLoader = new ImageLoaderPicasso();
 
         reposRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         reposRecyclerView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
     }
+
 
     @Override
     public void init() {
@@ -94,5 +101,17 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
     @Override
     public void setUsername(String username) {
         usernameTextView.setText(username);
+    }
+
+    private void checkPermissions() {
+        if (!checkPermissionGrantedWriteExternalStorage()) {
+            Timber.d("Requesting permission");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+        }
+    }
+
+    private boolean checkPermissionGrantedWriteExternalStorage() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_GRANTED;
     }
 }

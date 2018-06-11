@@ -21,7 +21,7 @@ public class MainPresenter extends MvpPresenter<MainView> implements IRepoListPr
 
     public MainPresenter(Scheduler scheduler) {
         this.scheduler = scheduler;
-        userRepo = new UserRepo(UserRepo.CacheDbType.PAPER);
+        userRepo = new UserRepo(UserRepo.CacheDbType.REALM_DISK);
     }
 
     @Override
@@ -39,8 +39,9 @@ public class MainPresenter extends MvpPresenter<MainView> implements IRepoListPr
                 .subscribe(user -> {
                     this.user = user;
                     getViewState().hideLoading();
-                    getViewState().showAvatar(user.getAvatarUrl());
                     getViewState().setUsername(user.getLogin());
+                    Timber.d("**********" + user.getAvatarUrl());
+                    getViewState().showAvatar(user.getAvatarUrl());
                     userRepo.getUserRepos(user)
                             .observeOn(scheduler)
                             .subscribe(repositories -> {

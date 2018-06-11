@@ -25,6 +25,9 @@ public class UserRepo {
             case PAPER:
                 cacheDB = new PaperDataCache();
                 break;
+            case REALM_DISK:
+                cacheDB = new RealmDiskDataCache();
+                break;
             default:
                 cacheDB = new RealmDataCache();
                 break;
@@ -37,8 +40,8 @@ public class UserRepo {
         } else {
             return ApiHolder.getApi()
                     .getUser(username)
-                    .subscribeOn(Schedulers.io())
-                    .map(cacheDB::saveUserToDB);
+                    .map(cacheDB::saveUserToDB)
+                    .subscribeOn(Schedulers.io());
         }
     }
 
@@ -53,5 +56,5 @@ public class UserRepo {
         }
     }
 
-    public enum CacheDbType {AA, PAPER, REALM}
+    public enum CacheDbType {AA, PAPER, REALM, REALM_DISK}
 }

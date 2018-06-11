@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import com.squareup.picasso.Picasso;
 
 import ru.geekbrains.android3_5.model.image.ImageLoader;
+import timber.log.Timber;
 
 /**
  * Created by stanislav on 3/12/2018.
@@ -14,6 +15,12 @@ import ru.geekbrains.android3_5.model.image.ImageLoader;
 public class ImageLoaderPicasso implements ImageLoader<ImageView> {
     @Override
     public void loadInto(@Nullable String url, ImageView container) {
-        Picasso.get().load(url).into(container);
+        Timber.d("Loading from: " + url);
+
+        Picasso.get()
+                .load(url)
+                .into(container);
+
+
     }
 }
